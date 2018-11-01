@@ -141,7 +141,7 @@ def breadthFirstSearch(problem):
             currentNode = fringe.pop()
 
 
-
+        print problem.getCostOfActions(getPath(currentNode))
         depth = currentNode[2]+1
         deadEnd.append(currentNode[0])
         if problem.isGoalState(currentNode[0]):
@@ -171,6 +171,44 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    closed = []
+    deadEnd = []
+    depth = 0
+    prevNode = []
+    fringe = util.PriorityQueue()
+    fringe.push([problem.getStartState(),None,depth,prevNode],problem.getCostOfActions(getPath([problem.getStartState(),None,depth,prevNode])))
+    deadEnd.append(problem.getStartState())
+    while True:
+        if fringe.isEmpty():
+            print "There is no way to reach goal!"
+            return []
+        currentNode = fringe.pop()
+        while currentNode[0] in closed:
+            currentNode = fringe.pop()
+        depth = currentNode[2]+1
+        deadEnd.append(currentNode[0])
+        if problem.isGoalState(currentNode[0]):
+            break
+
+        successors = problem.getSuccessors(currentNode[0])
+        prevNode = currentNode
+
+
+        for i in successors:
+            node = [i[0],i[1],problem.getCostOfActions(getPath(currentNode)),prevNode]
+
+            if node[0] not in closed and node[0] not in deadEnd:
+                fringe.push(node,problem.getCostOfActions(getPath(node)))
+
+        closed.append(prevNode[0])
+    path = []
+    map = currentNode
+    while map[1] != None:
+        d = map[1]
+        path.append(d)
+        map = map[3]
+    path.reverse()
+    return path
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -185,6 +223,15 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
 
+def getPath(node):
+    path = []
+    map = node
+    while map[1] != None:
+        d = map[1]
+        path.append(d)
+        map = map[3]
+    path.reverse()
+    return path
 # Abbreviations
 bfs = breadthFirstSearch
 dfs = depthFirstSearch
