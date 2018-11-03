@@ -139,9 +139,6 @@ def breadthFirstSearch(problem):
         currentNode = fringe.pop()
         while currentNode[0] in closed:
             currentNode = fringe.pop()
-
-
-        print problem.getCostOfActions(getPath(currentNode))
         depth = currentNode[2]+1
         deadEnd.append(currentNode[0])
         if problem.isGoalState(currentNode[0]):
