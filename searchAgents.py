@@ -507,7 +507,6 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
         "*** YOUR CODE HERE ***"
         closed = []
-
         depth = 0
         prevNode = []
         fringe = util.Queue()
