@@ -89,7 +89,6 @@ def depthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
     currentNode = []
     closed = []
-    deadEnd = []
     depth = 0;
     prevNode = []
     fringe = util.Stack()
@@ -108,10 +107,8 @@ def depthFirstSearch(problem):
         prevNode = currentNode
         for i in successors:
             node = [i[0],i[1],depth,prevNode]
-            if node[0] not in closed and node[0] not in deadEnd:
+            if node[0] not in closed:
                 fringe.push(node)
-        else:
-            deadEnd.append(node[0])
     path = []
     map = currentNode
     while map[1] != None:
@@ -126,12 +123,10 @@ def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
     closed = []
-    deadEnd = []
     depth = 0
     prevNode = []
     fringe = util.Queue()
     fringe.push([problem.getStartState(),None,depth,prevNode])
-    deadEnd.append(problem.getStartState())
     while True:
         if fringe.isEmpty():
             print "There is no way to reach goal!"
@@ -140,7 +135,6 @@ def breadthFirstSearch(problem):
         while currentNode[0] in closed:
             currentNode = fringe.pop()
         depth = currentNode[2]+1
-        deadEnd.append(currentNode[0])
         if problem.isGoalState(currentNode[0]):
             break
 
@@ -151,7 +145,7 @@ def breadthFirstSearch(problem):
         for i in successors:
             node = [i[0],i[1],depth,prevNode]
 
-            if node[0] not in closed and node[0] not in deadEnd:
+            if node[0] not in closed:
                 fringe.push(node)
 
         closed.append(prevNode[0])
@@ -169,12 +163,10 @@ def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
     closed = []
-    deadEnd = []
     depth = 0
     prevNode = []
     fringe = util.PriorityQueue()
     fringe.push([problem.getStartState(),None,depth,prevNode],problem.getCostOfActions(getPath([problem.getStartState(),None,depth,prevNode])))
-    deadEnd.append(problem.getStartState())
     while True:
         if fringe.isEmpty():
             print "There is no way to reach goal!"
@@ -183,7 +175,6 @@ def uniformCostSearch(problem):
         while currentNode[0] in closed:
             currentNode = fringe.pop()
         depth = currentNode[2]+1
-        deadEnd.append(currentNode[0])
         if problem.isGoalState(currentNode[0]):
             break
 
@@ -194,7 +185,7 @@ def uniformCostSearch(problem):
         for i in successors:
             node = [i[0],i[1],problem.getCostOfActions(getPath(currentNode)),prevNode]
 
-            if node[0] not in closed and node[0] not in deadEnd:
+            if node[0] not in closed:
                 fringe.push(node,problem.getCostOfActions(getPath(node)))
 
         closed.append(prevNode[0])
@@ -219,12 +210,10 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
     closed = []
-    deadEnd = []
     depth = 0
     prevNode = []
     fringe = util.PriorityQueue()
     fringe.push([problem.getStartState(),None,depth,prevNode],problem.getCostOfActions(getPath([problem.getStartState(),None,depth,prevNode])))
-    deadEnd.append(problem.getStartState())
     while True:
         if fringe.isEmpty():
             print "There is no way to reach goal!"
@@ -233,7 +222,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         while currentNode[0] in closed:
             currentNode = fringe.pop()
         depth = currentNode[2]+1
-        deadEnd.append(currentNode[0])
         if problem.isGoalState(currentNode[0]):
             break
 
@@ -244,7 +232,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         for i in successors:
             node = [i[0],i[1],problem.getCostOfActions(getPath(currentNode)),prevNode]
 
-            if node[0] not in closed and node[0] not in deadEnd:
+            if node[0] not in closed:
                 fringe.push(node,problem.getCostOfActions(getPath(node))+heuristic(node[0],problem))
 
         closed.append(prevNode[0])
